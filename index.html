@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>
+			Трудоустройство несовершеннолетних | Аналитическое исследование
+		</title>
+
+		<style>
+			@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,900;1,900&display=swap');
+
+			:root {
+				--bg: #0d0e10; /* Глубокий графит */
+				--text-primary: #e4e4e7;
+				--text-secondary: #a1a1aa;
+				--accent: #82aaad; /* Приглушенный стальной синий */
+				--grid-color: rgba(255, 255, 255, 0.04);
+				--transition-slow: 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+				--transition-v-slow: 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			html {
+				scroll-behavior: smooth;
+			}
+
+			body {
+				font-family: 'Inter', sans-serif;
+				background-color: var(--bg);
+				color: var(--text-primary);
+				line-height: 1.7;
+				overflow-x: hidden;
+				/* ИНЖЕНЕРНАЯ СЕТКА */
+				background-image: linear-gradient(
+						var(--grid-color) 1px,
+						transparent 1px
+					),
+					linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+				background-size: 80px 80px;
+			}
+
+			/* Индикатор чтения */
+			#read-progress {
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 3px;
+				background: var(--accent);
+				width: 0%;
+				z-index: 10000;
+			}
+
+			/* МИНИМАЛИСТИЧНЫЙ ХЕДЕР */
+			header {
+				position: fixed;
+				top: 0;
+				width: 100%;
+				padding: 30px 60px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				z-index: 1000;
+				mix-blend-mode: difference;
+			}
+
+			.logo {
+				font-size: 0.7rem;
+				font-weight: 900;
+				text-transform: uppercase;
+				letter-spacing: 0.3em;
+			}
+			nav a {
+				color: white;
+				text-decoration: none;
+				font-size: 0.7rem;
+				margin-left: 40px;
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				opacity: 0.4;
+				transition: var(--transition-slow);
+			}
+			nav a:hover {
+				opacity: 1;
+				letter-spacing: 0.3em;
+			}
+
+			/* HERO SECTION */
+			.hero {
+				height: 100vh;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+				padding: 60px;
+				border-bottom: 1px solid var(--grid-color);
+			}
+
+			.hero h1 {
+				font-family: 'Playfair Display', serif;
+				font-size: clamp(3rem, 12vw, 10rem);
+				line-height: 0.85;
+				margin-bottom: 20px;
+				font-style: italic;
+				font-weight: 900;
+			}
+
+			.hero p {
+				max-width: 600px;
+				font-size: 1.2rem;
+				color: var(--text-secondary);
+				margin-left: auto;
+				text-align: right;
+			}
+
+			/* КОНТЕНТНЫЕ БЛОКИ */
+			section {
+				padding: 120px 60px;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 100px;
+				border-bottom: 1px solid var(--grid-color);
+				position: relative;
+			}
+
+			
+			section.wide {
+				grid-template-columns: 1fr;
+				max-width: 1500px;
+				margin: 0 auto;
+				border-bottom: none;
+			}
+
+			h2 {
+				font-size: 3.5rem;
+				line-height: 1;
+				letter-spacing: -0.05em;
+				margin-bottom: 40px;
+				color: var(--accent);
+			}
+
+			p {
+				margin-bottom: 30px;
+				font-size: 1.15rem;
+				color: var(--text-secondary);
+			}
+
+			.image-container {
+				width: 100%;
+				height: 600px;
+				border-radius: 4px;
+				overflow: hidden;
+				background: #161719;
+				border: 1px solid var(--grid-color);
+				transition: var(--transition-slow);
+				cursor: crosshair;
+			}
+
+			.image-container img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				opacity: 0.5;
+				transition: var(--transition-v-slow);
+				filter: grayscale(1);
+			}
+
+			.image-container:hover img {
+				opacity: 1;
+				filter: grayscale(0);
+				transform: scale(1.05);
+			}
+
+			/* ЦИТАТЫ */
+			.pull-quote {
+				font-family: 'Playfair Display', serif;
+				font-size: 3rem;
+				line-height: 1.1;
+				font-style: italic;
+				color: var(--text-primary);
+				padding: 60px 0;
+				border-top: 1px solid var(--accent);
+				grid-column: span 2;
+			}
+
+			
+			.info-panel {
+				padding: 60px;
+				background: rgba(255, 255, 255, 0.02);
+				border-left: 2px solid var(--accent);
+				transition: var(--transition-slow);
+			}
+
+			.info-panel:hover {
+				background: rgba(255, 255, 255, 0.05);
+			}
+
+			.list-item {
+				margin-bottom: 20px;
+				border-bottom: 1px solid var(--grid-color);
+				padding-bottom: 10px;
+			}
+			.list-item b {
+				display: block;
+				font-size: 1.3rem;
+				color: var(--text-primary);
+			}
+
+			
+			.slow-card {
+				border: 1px solid var(--grid-color);
+				padding: 40px;
+				transition: var(--transition-slow);
+			}
+			.slow-card:hover {
+				transform: translateY(-10px);
+				border-color: var(--accent);
+			}
+
+			footer {
+				padding: 100px 60px;
+				display: flex;
+				justify-content: space-between;
+				font-size: 0.8rem;
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				opacity: 0.4;
+			}
+			.editorial-section {
+    padding: 100px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Две колонки */
+    gap: 80px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1); /* Вязкость */
+}
+
+/* Когда секция появляется */
+.editorial-section.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Заголовки разделов */
+.editorial-section h2 {
+    grid-column: span 2;
+    font-family: 'Playfair Display', serif; /* Или обычный, если нет этого шрифта */
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-style: italic;
+    font-weight: 900;
+    margin-bottom: 20px;
+    color: #82aaad; /* Тот самый стальной синий */
+}
+
+/* Текстовые блоки */
+.editorial-content {
+    font-size: 1.15rem;
+    color: #a1a1aa;
+    line-height: 1.8;
+}
+
+/* Акцентная панель для списков и советов */
+.accent-panel {
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.02);
+    border-left: 2px solid #82aaad;
+    transition: 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.accent-panel:hover {
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateX(10px);
+}
+
+.editorial-list {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.editorial-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+}
+
+.editorial-list li::before {
+    content: "→";
+    margin-right: 15px;
+    color: #82aaad;
+}
+
+/* Модификатор для широкой секции на одну колонку */
+.editorial-section.wide {
+    grid-template-columns: 1fr;
+    max-width: 900px;
+}
+
+
+			.reveal {
+				opacity: 0;
+				transform: translateY(40px);
+				transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+			}
+			.reveal.active {
+				opacity: 1;
+				transform: translateY(0);
+			}
+
+			@media (max-width: 1024px) {
+				section {
+					grid-template-columns: 1fr;
+					padding: 60px 30px;
+				}
+				.hero h1 {
+					font-size: 18vw;
+				}
+				.hero p {
+					text-align: left;
+					margin: 20px 0;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="read-progress"></div>
+
+		<header>
+			<div class="logo">вероника хованская / медиастарт</div>
+			<nav>
+				<a href="#content">введение</a>
+				<a href="#risks">Риски</a>
+				<a href="#guide">Руководство</a>
+				<a href="#about">Инфо</a>
+			</nav>
+		</header>
+		<section class="hero" id="top">
+			<h1>
+				Трудность <br />
+				устройства.
+			</h1>
+			<p>
+				Исследование структурных проблем трудоустройства подростков, рисков
+				теневой занятости и методов безопасной интеграции в современную
+				экономику.
+			</p>
+		</section>
+
+		<section class="reveal" id="content">
+			<div>
+				<h2>Введение</h2>
+				<p>
+					В современном обществе вопрос трудоустройства несовершеннолетних
+					становится всё более актуальным. Это комплексная
+					социально-экономическая проблема, затрагивающая интересы трёх сторон:
+					молодого поколения, работодателей и государства.<br />
+					<br />
+					Ранняя профессиональная адаптация имеет неоспоримые преимущества — она
+					способствует развитию ответственности и финансовой грамотности. Однако
+					существует ряд серьёзных барьеров, препятствующих легальному и
+					безопасному трудоустройству подростков.
+				</p>
+			</div>
+			<div class="slow-card">
+				<p>
+					Ранний старт способствует развитию ответственности и финансовой
+					грамотности. Однако существует ряд серьёзных барьеров, препятствующих
+					легальному и безопасному трудоустройству подростков.
+				</p>
+			</div>
+		</section>
+
+		<section class="reveal">
+			<div class="image-container">
+				<img
+					src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80"
+					alt="Learning"
+				/>
+			</div>
+			<div>
+				<h2>Основные проблемы трудоустройства</h2>
+				<p>
+					Трудовой кодекс РФ устанавливает жёсткие рамки: Минимальный возраст
+					для начала деятельности — 14 лет, но только с согласия родителей.
+					Продолжительность рабочего времени строго регламентирована:
+				</p>
+				<div class="list-item">
+					<b>До 16 лет</b>
+					Не более 24 часов в неделю.
+				</div>
+				<div class="list-item">
+					<b>От 16 до 18 лет</b>
+					Не более 35 часов в неделю.
+				</div>
+				<p>
+					Существует прямой запрет на выполнение вредных для здоровья нагрузок,
+					работу в ночное время и командировки.
+				</p>
+				<p>
+					Дефицит рабочих мест является второй важной проблемой. Большинство
+					работодателей предпочитают нанимать взрослых сотрудников, поскольку
+					подростки часто не обладают необходимыми профессиональными навыками.
+					<br /><br />
+					Компании вынуждены нести дополнительные расходы на контроль и обучение
+					несовершеннолетних работников, что создаёт определённые риски с точки
+					зрения соблюдения трудового законодательства.
+				</p>
+				<p>
+					Информационная неграмотность затрагивает как самих подростков, так и
+					их родителей. Многие молодые люди не знают о законных способах
+					трудоустройства, не умеют составлять резюме и проходить собеседования.
+					<br /><br />
+					Отсутствие базовых знаний о правах несовершеннолетних работников
+					создаёт дополнительные сложности при поиске работы.
+				</p>
+			</div>
+		</section>
+
+		<section class="reveal wide">
+			<div class="pull-quote">
+				«Главная проблема — разрыв между ожиданиями подростков и реальностью
+				рынка труда. <br /><br />
+				Молодые люди хотят зарабатывать, но не готовы к ответственности и
+				дисциплине. Работодатели, в свою очередь, боятся юридических рисков.<br /><br />
+				Решение — создание специализированных программ стажировок с
+				государственным субсидированием,<br /><br />
+				где подростки могли бы получать опыт под контролем наставников и с
+				полным соблюдением закона»
+			</div>
+		</section>
+
+		<section class="reveal wide">
+			<h2>Риски нелегальной занятости</h2>
+			<p>
+				Особую тревогу вызывает рост числа случаев нелегального трудоустройства
+				подростков. Из-за сложностей с официальным оформлением многие молодые
+				люди соглашаются на работу без трудового договора. Это приводит к
+				серьёзным последствиям:
+			</p>
+		</section>
+
+		<section class="reveal" id="risks">
+			<div class="info-panel">
+				<h2>Нелегальная занятость</h2>
+				<p>
+					Особую тревогу вызывает рост числа случаев неофициального
+					трудоустройства. Согласие на работу без договора приводит к:
+				</p>
+
+				<p />
+				<ul>
+					<li class="list-item">Эксплуатация труда и занижение оплаты;</li>
+					<li class="list-item">Грубое нарушение техники безопасности;</li>
+					<li class="list-item">Нарушение прав несовершеннолетнего.</li>
+				</ul>
+			</div>
+			<div
+				class="info-panel"
+				style="border-left-color: var(--accent); opacity: 0.8"
+			>
+				<h2>Эпоха цифровых платформ</h2>
+				<p>Рост платформенной занятости (Gig economy) создал новые вызовы:</p>
+				<ul>
+					<li class="list-item">Регистрация на сервисах под чужими данными;</li>
+					<li class="list-item">Нулевой контроль со стороны платформы;</li>
+					<li class="list-item">
+						Трудности в юридическом взыскании задолженности.
+					</li>
+				</ul>
+			</div>
+		</section>
+
+		<section class="reveal">
+			<div>
+				<h2>Конкретные примеры</h2>
+				<p>
+					В 2023 году был выявлен вопиющий случай в одном из регионов России,
+					когда группа подростков 15–17 лет работала на складе без оформления
+					трудовых отношений. Работодатель платил им зарплату ниже минимального
+					размера оплаты труда и заставлял работать по 10–12 часов, включая
+					ночные смены.<br />После проверки инспекции по труду работодатель был
+					оштрафован, а подростки остались без заработка.
+				</p>
+				<p>
+					СОсобую актуальность приобретает проблема сезонной занятости. Летом
+					многие подростки стремятся найти работу курьерами, промоутерами или в
+					сфере обслуживания.
+					<br /><br />
+					Однако работодатели часто предлагают «серые» схемы оплаты труда, не
+					обеспечивают гарантии отпуска и больничных, а также не проводят
+					необходимое обучение по охране труда.
+				</p>
+			</div>
+			<div class="image-container">
+				<img
+					src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80"
+					alt="Office"
+				/>
+			</div>
+		</section>
+
+		<section class="reveal wide">
+			<h2>Новые вызовы цифровой эпохи</h2>
+			<p>
+				Цифровизация экономика создала дополнительные риски для
+				несовершеннолетних работников. Рост платформенной занятости привёл к
+				появлению новых проблем:
+			</p>
+			<p>
+				* Регистрация на платформах под чужими данными<br />* Отсутствие
+				контроля за условиями труда<br />
+				* Сложности с взысканием задолженности
+			</p>
+		</section>
+
+		<section class="reveal" id="guide">
+			<div class="info-panel">
+				<h2>Пути решения проблемы</h2>
+				<p>
+					Для преодоления существующих трудностей необходим комплексный подход.
+					Важно развивать государственные программы поддержки работодателей,
+					готовых принимать на работу подростков. Необходимо внедрять
+					профориентационные курсы в школах, обучать подростков основам
+					трудового права, составлению резюме и прохождению собеседований.
+					<p>
+						Создание специализированных онлайн-платформ для трудоустройства
+						несовершеннолетних может стать эффективным решением. Такие платформы
+						должны включать систему верификации работодателей и предоставлять
+						подросткам необходимую информацию о правах и обязанностях.
+					</p>
+				</p>
+			</div>
+			<div class="info-panel" style="border-left-color: white">
+				<h2>➦</h2>
+					<p>
+						Как успешно пройти собеседование: советы и рекомендации Перед тем как
+						идти на собеседование необходимо найти подходящую вакансию. При поиске
+						работы важно соблюдать определённые правила:
+					</p>
+					<b
+						>* Подготовить необходимые документы (паспорт, СНИЛС, медицинскую
+						справку)<br /> * Получить согласие родителей</b> <br />
+					<b>
+						
+						* Тщательно изучить условия
+					</b>
+					<b>
+		
+						труда <br /> * Внимательно читать трудовой договор <br> * Сохранять копии важных
+						документов
+					</b>
+			</div>
+		</section>
+
+		<section class="reveal">
+			<div class="slow-card">
+				<h2>Подготовка к встрече с работодателем</h2>
+				<p>
+					Собеседование — это важный этап на пути к получению желаемой работы. От того, как вы подготовитесь к встрече с работодателем и какие вопросы зададите, зависит ваше будущее трудоустройство. Грамотное построение диалога поможет не только произвести хорошее впечатление, но и получить полную информацию о будущей работе
+				</p>
+			</div>
+			<div class="slow-card">
+				<h2>Основные моменты разговора</h2>
+				<p>
+					В начале собеседования важно правильно представить себя. Расскажите о своих сильных сторонах и профессиональных навыках. Даже если у вас нет большого опыта работы, подчеркните те качества, которые могут быть полезны в будущей должности: ответственность, обучаемость, коммуникабельность.
+				</p>
+				<p>
+					Не менее важно объяснить работодателю, почему именно эта компания привлекла ваше внимание. Проявите искренний интерес к организации, расскажите, что вас вдохновляет в её деятельности, какие ценности компании вам близки. Это покажет вашу заинтересованность и серьёзный подход к выбору места работы.<br/><br />Вопросы об условиях труда
+				</p>
+				<p>
+					После самопрезентации переходите к обсуждению конкретных условий работы.
+					
+					<br/> Уточните:
+					<b>
+						<br/>* рабочий график;
+						<br/>* месторасположение офиса или места работы;
+						<br/>* формат работы (удалённый или офисный);
+						<br/>* возможности для профессионального роста.
+					</b>
+				</p>
+			</div>
+		</section>
+		<section class="editorial-section wide reveal">
+    <h2>Подготовка к встрече с работодателем</h2>
+    <div class="editorial-content">
+        <p>Собеседование — это важный этап на пути к получению желаемой работы. От того, как вы подготовитесь к встрече с работодателем и какие вопросы зададите, зависит ваше будущее трудоустройство. Грамотное построение диалога поможет не только произвести хорошее впечатление, но и получить полную информацию о будущей работе.</p>
+    </div>
+</section>
+
+<!-- Секция 2 -->
+<section class="editorial-section reveal">
+    <h2>Основные моменты разговора</h2>
+    <div class="editorial-content">
+        <p>В начале собеседования важно правильно представить себя. Расскажите о своих сильных сторонах и профессиональных навыках. Даже если у вас нет большого опыта работы, подчеркните те качества, которые могут быть полезны в будущей должности: ответственность, обучаемость, коммуникабельность.</p>
+    </div>
+    <div class="editorial-content">
+        <p>Не менее важно объяснить работодателю, почему именно эта компания привлекла ваше внимание. Проявите искренний интерес к организации, расскажите, что вас вдохновляет в её деятельности, какие ценности компании вам близки. Это покажет вашу заинтересованность и серьёзный подход к выбору места работы.</p>
+    </div>
+</section>
+
+<!-- Секция 3 (Чек-лист) -->
+<section class="editorial-section reveal">
+    <h2>Вопросы об условиях труда</h2>
+    <div class="editorial-content">
+        <p>После самопрезентации переходите к обсуждению конкретных условий работы. Уточните:</p>
+    </div>
+    <div class="accent-panel">
+        <ul class="editorial-list">
+            <li>рабочий график;</li>
+            <li>месторасположение офиса или места работы;</li>
+            <li>формат работы (удалённый или офисный);</li>
+            <li>возможности для профессионального роста.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Секция 4 -->
+<section class="editorial-section reveal">
+    <h2>Ключевые темы для обсуждения</h2>
+    <div class="accent-panel">
+        <p>Финансовая составляющая — один из важнейших аспектов трудоустройства. Обязательно обсудите:</p>
+        <ul class="editorial-list">
+            <li>размер заработной платы;</li>
+            <li>периодичность выплат;</li>
+            <li>наличие бонусов и премий;</li>
+            <li>систему оплаты труда.</li>
+        </ul>
+    </div>
+    <div class="editorial-content">
+        <p>Важно прояснить эти моменты до подписания трудового договора, чтобы финансовые ожидания сторон полностью совпадали.</p>
+    </div>
+</section>
+
+<!-- Секция 5 -->
+<section class="editorial-section reveal">
+    <h2>Организационные вопросы</h2>
+    <div class="editorial-content">
+        <p>Не забудьте прояснить все формальности:</p>
+        <ul class="editorial-list">
+            <li>продолжительность испытательного срока;</li>
+            <li>порядок оформления документов;</li>
+            <li>необходимые для трудоустройства бумаги;</li>
+            <li>процедуру увольнения.</li>
+        </ul>
+    </div>
+    <div class="editorial-content">
+        <p>Четкое понимание административных процедур поможет избежать бюрократических сложностей в будущем.</p>
+    </div>
+</section>
+
+
+<section class="editorial-section reveal">
+    <h2>Важные рекомендации</h2>
+    <div class="editorial-content">
+        <p>Задавайте вопросы чётко и по существу. Избегайте расплывчатых формулировок. Записывайте важную информацию, чтобы не забыть детали после собеседования.</p>
+    </div>
+    <div class="editorial-content">
+        <p>Сохраняйте профессиональный тон разговора. Проявляйте уважение к собеседнику, но при этом не бойтесь отстаивать свои интересы. Помните, что собеседование — это диалог, в котором обе стороны должны найти взаимопонимание.</p>
+    </div>
+</section>
+
+<!-- Секция 7 -->
+<section class="editorial-section wide reveal">
+    <h2>Международное измерение проблемы</h2>
+    <div class="editorial-content">
+        <p>Анализ международного опыта показывает, что многие страны сталкиваются с аналогичными проблемами. В развитых государствах существуют специальные программы поддержки молодёжной занятости, включающие субсидирование работодателей, профессиональное обучение, наставничество, психологическую поддержку</p>
+    </div>
+</section>
+
+<!-- Секция 8 -->
+<section class="editorial-section reveal">
+    <h2>Роль образовательных учреждений</h2>
+    <div class="accent-panel">
+        <p>Школы и колледжи могут сыграть ключевую роль в решении проблемы. Необходимо включать курсы по основам трудового права в учебные планы, организовывать встречи с работодателями, создавать школьные предприятия, развивать систему профессиональной ориентации. Это значительно подготовит несовершеннолетних к безопасному трудоустройству. </p>
+    </div>
+    <div class="editorial-content">
+        <p>Поддержка учебных заведений на этапе выбора первого рабочего места снижает риски попадания подростка в "теневой" сектор экономики.</p>
+    </div>
+</section>
+
+<!-- Секция 9 (Экономика) -->
+<section class="editorial-section wide reveal">
+    <h2>Экономический аспект</h2>
+    <div class="editorial-content" style="border-top: 1px solid #82aaad; padding-top: 40px;">
+        <p style="font-size: 1.5rem; color: #e4e4e7;">Трудоустройство подростков имеет важное значение для экономики страны: формирование будущего трудового потенциала, снижение молодёжной безработицы, развитие предпринимательских навыков, повышение финансовой грамотности населения</p>
+    </div>
+</section>
+		<section class="reveal">
+			<div class="image-container">
+				<img
+					src="https://s0.rbk.ru/v6_top_pics/media/img/0/73/347151579745730.webp"
+					alt="Learning"
+				/>
+			</div>
+			<div>
+				<h2>Заключение</h2>
+				<p>
+					Трудовой кодекс РФ устанавливает жёсткие рамки: Минимальный возраст
+					для начала деятельности — 14 лет, но только с согласия родителей.
+					Продолжительность рабочего времени строго регламентирована:Проблема трудоустройства подростков требует совместных усилий государства, бизнеса и образовательных учреждений. Необходимо найти баланс между защитой прав несовершеннолетних и интересами работодателей. Только при таком подходе можно создать эффективную систему, которая поможет молодёжи получить первый профессиональный опыт и одновременно защитит их права.
+				</p>
+				<p>
+					Ключевым фактором успеха является повышение информированности подростков о законных способах заработка и создание необходимой инфраструктуры поддержки. Важно развивать систему стажировок, наставничества и онлайн-ресурсов, которые помогут молодым людям сделать первые шаги в профессиональной жизни.
+				</p>
+				<p>
+					Только объединив усилия всех заинтересованных сторон, можно превратить потенциальную проблему в ресурс для развития молодого поколения и экономики в целом. Трудоустройство подростков должно стать не препятствием, а возможностью для их личностного и профессионального роста.
+				</p>
+			</div>
+		</section>
+
+
+		<section class="reveal wide" style="text-align: center">
+			<h2 style="font-size: 5rem">Медиа 2026.</h2>
+			<p>
+				Трудоустройство подростков — это не препятствие, а возможность.
+				Совместные усилия государства, бизнеса и образовательных учреждений
+				помогут превратить этот вызов в ресурс для экономики будущего.
+			</p>
+		</section>
+
+		<footer>
+			<div class="logo">Вероника Хованская / Медиастарт</div>
+			<nav>
+				<a href="#top">Наверх</a>
+				<a href="#top">Copyright 2026</a>
+			</nav>
+		</footer>
+
+		<script>
+
+			window.addEventListener('scroll', () => {
+				const winScroll =
+					document.body.scrollTop || document.documentElement.scrollTop
+				const height =
+					document.documentElement.scrollHeight -
+					document.documentElement.clientHeight
+				const scrolled = (winScroll / height) * 100
+				document.getElementById('read-progress').style.width = scrolled + '%'
+
+				// Проявление секций
+				document.querySelectorAll('.reveal').forEach(el => {
+					const revealTop = el.getBoundingClientRect().top
+					if (revealTop < window.innerHeight - 150) {
+						el.classList.add('active')
+					}
+				})
+			})
+
+			// Первая инициализация
+			window.onload = () => {
+				document.querySelector('.hero').classList.add('active')
+			}
+		</script>
+	</body>
+</html>
