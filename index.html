@@ -232,29 +232,27 @@
 			.editorial-section {
     padding: 100px 60px;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Две колонки */
+    grid-template-columns: 1fr 1fr; 
     gap: 80px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     opacity: 0;
     transform: translateY(40px);
-    transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1); /* Вязкость */
+    transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1); 
 }
 
-/* Когда секция появляется */
 .editorial-section.active {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* Заголовки разделов */
 .editorial-section h2 {
     grid-column: span 2;
-    font-family: 'Playfair Display', serif; /* Или обычный, если нет этого шрифта */
+    font-family: 'Playfair Display', serif;
     font-size: clamp(2rem, 5vw, 4rem);
     font-style: italic;
     font-weight: 900;
     margin-bottom: 20px;
-    color: #82aaad; /* Тот самый стальной синий */
+    color: #82aaad; 
 }
 
 /* Текстовые блоки */
@@ -264,7 +262,7 @@
     line-height: 1.8;
 }
 
-/* Акцентная панель для списков и советов */
+
 .accent-panel {
     padding: 40px;
     background: rgba(255, 255, 255, 0.02);
@@ -341,8 +339,8 @@
 		</header>
 		<section class="hero" id="top">
 			<h1>
-				Трудность <br />
-				устройства.
+				Трудоустройство <br />
+				подростков.
 			</h1>
 			<p>
 				Исследование структурных проблем трудоустройства подростков, рисков
